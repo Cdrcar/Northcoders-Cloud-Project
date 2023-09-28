@@ -14,8 +14,7 @@
 - [Future Improvements](#future-improvements)
 - [How to Recreate the Environment](#how-to-recreate-the-environment)
 - [Final result](#final-result)
-- [License](#license)
-- [Contact Me](#contact)
+- [Contact](#contact)
 
 ## [Overview](#overview)
 

@@ -1,4 +1,6 @@
-# Cloud Engineering Team Project
+# Cloud Engineering Team Project <img src="https://github.com/Cdrcar/Northcoders-Cloud-Project/assets/117651175/79b784f4-933d-44be-a287-b2c1fe471635" width="100" align="middle">
+
+
 
 ## [Table of Contents](#table-of-contents)
 
@@ -27,7 +29,7 @@ The primary objective of this project was to deploy the learner management syste
 
 - AWS (Amazon Web Services)
 - Terraform for Infrastructure as Code (IaC)
-- Kubernetes (EKS - Elastic Kubernetes Service)
+- Kubernetes (EKS - Elastic Kubernetes Service) for orchestration
 - Docker for containerization
 - CircleCI for continuous integration and continuous deployment (CI/CD)
 - ArgoCD for GitOps-based application deployment

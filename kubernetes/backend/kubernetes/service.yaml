@@ -1,0 +1,21 @@
+# You will need to use type: LoadBalancer so that the frontend can hit the API when loaded in the browser
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  labels:
+    app: backend
+    app.kubernetes.io/part-of: backend # bookstore
+  annotations:
+    prometheus.io/port: "metrics-port"
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/actuator/prometheus"
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: metrics-port
+      targetPort: 8080
+  type: LoadBalancer

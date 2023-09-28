@@ -1,0 +1,58 @@
+pipeline {
+    agent {
+        kubernetes {
+            label 'jenkins-agent'
+            defaultContainer 'jnlp'
+            yaml """
+            apiVersion: v1
+            kind: Pod
+            spec:
+              containers:
+              - name: jnlp
+                image: jenkins/inbound-agent
+              - name: docker
+                image: docker
+                command:
+                  - cat
+                tty: true
+            """
+        }
+    }
+
+    environment {
+        AWS_REGION = 'eu-west-2'
+        AWS_ECR_REPO = "k8y9t4s7/frontend-jenkins"
+        DOCKER_IMAGE_NAME = 'frontend'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image
+                    docker.build("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
+                }
+                script {
+                    // Authenticate with ECR
+                    withCredentials([string(credentialsId: 'your-ecr-credentials', variable: 'AWS_CREDENTIALS')]) {
+                        sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ECR_REPO}"
+                    }
+                }
+                script {
+                    // Tag the Docker image with ECR repository URL
+                    sh "docker tag ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} ${AWS_ECR_REPO}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}"
+                }
+                script {
+                    // Push the Docker image to ECR
+                    sh "docker push ${AWS_ECR_REPO}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}"
+                }
+            }
+        }
+    }
+}
